@@ -23,12 +23,12 @@ struct MTFinger {
     var density: Float
 }
 
-typealias MTContactCallback = @convention(c) (UnsafeMutableRawPointer?, UnsafeMutablePointer<MTFinger>?, Int32, Double, Int32) -> Int32
+typealias MTContactCallback = @convention(c) (UnsafeMutableRawPointer?, UnsafeMutableRawPointer?, Int32, Double, Int32) -> Int32
 
 private let contactCallback: MTContactCallback = { _, fingers, count, timestamp, _ in
     var list: [MTFinger] = []
     if let fingers = fingers, count > 0 {
-        list = Array(UnsafeBufferPointer(start: fingers, count: Int(count)))
+        let typed = fingers.bindMemory(to: MTFinger.self, capacity: Int(count)); list = Array(UnsafeBufferPointer(start: typed, count: Int(count)))
     }
     MultitouchManager.shared.onFrame?(list, timestamp)
     return 0
