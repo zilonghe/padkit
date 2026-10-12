@@ -12,7 +12,12 @@
 | 三指按下 / 四指按下(物理点击) | `click3` / `click4` | 无 |
 | 三指上/下/左/右滑 | `swipe3Up/Down/Left/Right` | 最大化 / 无 / 窗口左半屏 / 窗口右半屏 |
 | 四指上/下/左/右滑 | `swipe4Up/Down/Left/Right` | 无 |
-| TipTap 左/右(一指按住,另一指在其左/右侧轻点) | `tipTapLeft` / `tipTapRight` | `cmd+shift+[` / `cmd+shift+]`(切换标签页) |
+| 一指按住·左/右侧轻点 | `tipTapLeft` / `tipTapRight` | `cmd+shift+[` / `cmd+shift+]`(切换标签页) |
+| 两指按住·左/右侧轻点(两指先静止 ≥0.15 秒,第三指 0.3 秒内点按抬起) | `twoHoldTapLeft` / `twoHoldTapRight` | `cmd+[` / `cmd+]`(后退 / 前进) |
+
+## 录制
+
+设置窗口中点“录制手势”,在触控板上做手势(8 秒超时,可取消),会显示识别结果(如“三指向左滑”)并可直接编辑、保存其动作。动作类型为“键盘快捷键”时,点“录制快捷键”后按下组合键即可写入(Esc 取消)。
 
 ## 支持的动作
 

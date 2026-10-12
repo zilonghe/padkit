@@ -62,6 +62,8 @@ struct AppConfig: Codable, Equatable {
         Gesture.swipe4Right.rawValue: ActionConfig(.none),
         Gesture.tipTapLeft.rawValue: ActionConfig(.shortcut, "cmd+shift+["),
         Gesture.tipTapRight.rawValue: ActionConfig(.shortcut, "cmd+shift+]"),
+        Gesture.twoHoldTapLeft.rawValue: ActionConfig(.shortcut, "cmd+["),
+        Gesture.twoHoldTapRight.rawValue: ActionConfig(.shortcut, "cmd+]"),
     ]
 
     init() {}

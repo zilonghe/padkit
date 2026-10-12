@@ -17,9 +17,14 @@ final class ClickInterceptor: @unchecked Sendable {
     private var enabled = true
     private var mapped: Set<Gesture> = []
     private var swallowUp = false
+    private var recording = false
     private var tap: CFMachPort?
 
     var isRunning: Bool { tap != nil }
+
+    func setRecording(_ on: Bool) {
+        lock.lock(); recording = on; lock.unlock()
+    }
 
     func update(enabled: Bool, mapped: Set<Gesture>) {
         lock.lock(); self.enabled = enabled; self.mapped = mapped; lock.unlock()
@@ -48,7 +53,7 @@ final class ClickInterceptor: @unchecked Sendable {
             let n = recognizer?.fingerCount ?? 0
             let g: Gesture? = n == 3 ? .click3 : (n == 4 ? .click4 : nil)
             lock.lock()
-            let hit = g.map { enabled && mapped.contains($0) } ?? false
+            let hit = g.map { recording || (enabled && mapped.contains($0)) } ?? false
             if hit { swallowUp = true }
             lock.unlock()
             if hit, let g = g {

@@ -10,6 +10,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     let store = ConfigStore()
     let recognizer = GestureRecognizer()
+    let recorder = Recorder()
     private var statusItem: NSStatusItem?
     private var enableItem: NSMenuItem?
     private var loginItem: NSMenuItem?
@@ -41,6 +42,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             a.runModal()
         }
         ensureAccessibility()
+        openSettings()
 
         NSWorkspace.shared.notificationCenter.addObserver(
             self, selector: #selector(didWake), name: NSWorkspace.didWakeNotification, object: nil)
@@ -48,7 +50,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     // MARK: gestures
 
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        openSettings()
+        return true
+    }
+
     func handle(_ g: Gesture) {
+        if recorder.isRecordingGesture {
+            recorder.didDetect(g)
+            return
+        }
         guard store.config.enabled else { return }
         ActionRunner.run(store.action(for: g))
     }
@@ -161,7 +172,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc func openSettings() {
         if settingsWindow == nil {
-            let w = NSWindow(contentViewController: NSHostingController(rootView: SettingsView(store: store)))
+            let w = NSWindow(contentViewController: NSHostingController(rootView: SettingsView(store: store, recorder: recorder)))
             w.title = "PadKit 设置"
             w.styleMask = [.titled, .closable, .resizable, .miniaturizable]
             w.isReleasedWhenClosed = false
