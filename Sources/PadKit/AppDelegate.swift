@@ -161,6 +161,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     @objc private func reconnect() { MultitouchManager.shared.restart() }
 
+    @objc func repairAccessibility() {
+        let p = Process()
+        p.executableURL = URL(fileURLWithPath: "/usr/bin/tccutil")
+        p.arguments = ["reset", "Accessibility", Bundle.main.bundleIdentifier ?? "com.zilonghe.padkit"]
+        try? p.run()
+        p.waitUntilExit()
+        let key = kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String
+        _ = AXIsProcessTrustedWithOptions([key: true] as CFDictionary)
+        if let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility") {
+            NSWorkspace.shared.open(url)
+        }
+    }
+
     @objc private func checkAX() {
         if AXIsProcessTrusted() {
             ClickInterceptor.shared.start()

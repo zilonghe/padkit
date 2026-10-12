@@ -43,6 +43,7 @@ struct SettingsView: View {
                 Text(store.fileURL.path).font(.caption).foregroundColor(.secondary).lineLimit(1).truncationMode(.middle)
                 Spacer()
                 Text(savedNote).font(.caption).foregroundColor(.green)
+                Button("修复授权") { AppDelegate.shared?.repairAccessibility() }
                 Button("在 Finder 中显示") { NSWorkspace.shared.activateFileViewerSelecting([store.fileURL]) }
                 Button("恢复默认") { store.config = AppConfig() }
                 Button("重新载入") { store.load(); savedNote = "已载入" }
